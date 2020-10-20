@@ -51,7 +51,8 @@ status_t server_receive(server_t * server, char * buff, size_t len){
 	return status;
 }
 
-status_t server_start(int argc, const char * argv[], const char * method, const char * key){
+status_t server_start(int argc, const char * argv[], const char * method
+												   , const char * key){
 	if( argv == NULL )
 		return ERROR_NULL_POINTER;
 
@@ -72,21 +73,20 @@ status_t server_start(int argc, const char * argv[], const char * method, const 
 	}
 
 	status = server_receive(&server, buff, SERVER_BUFF_SIZE);
-	if( ( status != OK ) && ( status != SOCKET_CLOSED ) ){
+	if( (status != OK) && (status != SOCKET_CLOSED) ){
 		server_destroy(&server);
 		return status;
 	}
-	while( status != SOCKET_CLOSED ){
-		
-		if( cypher_digest(&cypher,(unsigned char *) buff,(unsigned char *) output, SERVER_BUFF_SIZE) != 0 ){
+	while( status != SOCKET_CLOSED ){	
+		if( cypher_digest(&cypher,(unsigned char *) buff,(unsigned char *) output, 
+														  SERVER_BUFF_SIZE) != 0 ){
 			server_destroy(&server);
 			return ERROR_CYPHER_DIGEST;
 		}
-
 		fprintf(stdout, "%s", output);
 
 		status = server_receive(&server, buff, SERVER_BUFF_SIZE);
-		if( ( status != OK ) && ( status != SOCKET_CLOSED ) ){
+		if( (status != OK) && (status != SOCKET_CLOSED) ){
 			server_destroy(&server);
 			return status;
 		}

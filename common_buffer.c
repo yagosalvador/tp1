@@ -33,10 +33,6 @@ bool buffer_eof(const buffer_t buffer){
 	return buffer.eof;
 }
 
-size_t buffer_get_size(const buffer_t buffer){
-	return buffer.buff_size;
-}
-
 int buffer_get(const buffer_t buffer, char * output, size_t len){
 	if( snprintf(output, len, "%s", buffer.buff) < 0 )
 		return 1;

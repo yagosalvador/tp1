@@ -25,21 +25,28 @@ typedef struct cypher {
 	cypher_func_t func;
 } cypher_t;
 
-int cypher_cesar(cypher_t * self, const unsigned char * string, unsigned char * output, const size_t len);
+int cypher_cesar(cypher_t * self, const unsigned char * string, 
+				unsigned char * output, const size_t len);
 
-int cypher_vigenere(cypher_t * self, const unsigned char * string, unsigned char * output, const size_t len);
+int cypher_vigenere(cypher_t * self, const unsigned char * string, 
+					unsigned char * output, const size_t len);
 
-int cypher_rc4(cypher_t * self, const unsigned char * string, unsigned char * output, const size_t len);
+int cypher_rc4(cypher_t * self, const unsigned char * string, 
+			   unsigned char * output, const size_t len);
 
-int cypher_ksa(const unsigned char * key, const size_t key_length, unsigned char * permut_arr);
+int cypher_ksa(const unsigned char * key, const size_t key_length, 
+			   unsigned char * permut_arr);
 
-int cypher_prga(cypher_t * cypher, unsigned char * output, const size_t len, unsigned char * permut_arr);
+int cypher_prga(cypher_t * cypher, unsigned char * output, 
+	            const size_t len, unsigned char * permut_arr);
 
 int swap(void * a, void * b);
 
-int cypher_init(cypher_t * cypher, bool decrypt, const char * key, const char * method_str);
+int cypher_init(cypher_t * cypher, bool decrypt, 
+	            const char * key, const char * method_str);
 
-int cypher_digest(cypher_t * cypher, const unsigned char * string, unsigned char * output, const size_t len);
+int cypher_digest(cypher_t * cypher, const unsigned char * string, 
+	              unsigned char * output, const size_t len);
 
 int cypher_get_func(const char * str, cypher_func * func);
 

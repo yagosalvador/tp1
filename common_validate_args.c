@@ -6,17 +6,18 @@
 
 int get_long_opt(const char * opt, char * arg, size_t len){
 	if ( opt == NULL || arg == NULL )
-		return 1;
+		return -1;
 
 	char * ptr = strchr(opt, '=') + 1;
-	snprintf(arg, len, "%s", ptr);
-	//if()
-		//sth
+	int ret = snprintf(arg, len, "%s", ptr);
+	if ( ret < 0 )
+		return 1;
 	return 0;
 }
 
 
-int validate_args(int argc, const char * argv[], char * method, size_t method_len, char * key, size_t key_len){
+int validate_args(int argc, const char * argv[], char * method, 
+				  size_t method_len, char * key, size_t key_len){
 	if( argv == NULL )
 		return -1;
 
@@ -27,7 +28,8 @@ int validate_args(int argc, const char * argv[], char * method, size_t method_le
 		if(strstr(argv[i], METHOD_ARG) != NULL ){
 			method_pos = i;
 			get_long_opt(argv[i], method, method_len);
-			if( (method_pos + 1 < argc) && (strstr(argv[method_pos + 1], KEY_ARG) != NULL) ){
+			if( (method_pos + 1 < argc) && 
+				(strstr(argv[method_pos + 1], KEY_ARG) != NULL) ){
 				get_long_opt(argv[method_pos+1], key, key_len);
 				return 0;
 			}
@@ -36,4 +38,3 @@ int validate_args(int argc, const char * argv[], char * method, size_t method_le
 	}
 	return 1;
 }
-

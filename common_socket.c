@@ -61,8 +61,8 @@ status_t socket_bind_and_listen(socket_t * self, const char * port){
 			return ERROR_BINDING_SOCKET;
 		}
 	}
-
-	if( listen(self->fd, MAX_LISTENING_CONNECTIONS) == -1 ){ //should max_conn be part of sv config?
+	//should max_conn be part of sv config?
+	if( listen(self->fd, MAX_LISTENING_CONNECTIONS) == -1 ){ 
 		socket_destroy(self);
 		freeaddrinfo(res);
 		return ERROR_WHILE_LISTENING;
@@ -114,7 +114,6 @@ status_t socket_connect(socket_t * self, const char * host, const char * port){
 			socket_destroy(self);
 			return ERROR_CONNECTING_SOCKET;
 		}
-
 	}
 	freeaddrinfo(res);
 
@@ -142,9 +141,9 @@ status_t socket_send(socket_t * self, char * buff, size_t len){
 	if( self == NULL || buff == NULL )
 		return ERROR_NULL_POINTER;
 
-	int bytes_sent = 0, ret_value;
+	int bytes_sent = 0;
 	while ( bytes_sent < len ) {
-		ret_value = send(self->fd, buff + bytes_sent, len - bytes_sent, MSG_NOSIGNAL);
+		int ret_value = send(self->fd, buff + bytes_sent, len - bytes_sent, MSG_NOSIGNAL);
 		if ( ret_value == -1 )
 			return ERROR_SOCKET_SEND;
 		bytes_sent += ret_value;

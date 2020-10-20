@@ -14,7 +14,8 @@ typedef struct {
 
 status_t server_destroy(server_t * server);
 
-status_t server_start(int argc, const char * argv[], const char * method, const char * key);
+status_t server_start(int argc, const char * argv[], 
+					  const char * method, const char * key);
 
 status_t server_connect(server_t * sever, const char * port);
 

@@ -96,7 +96,7 @@ status_t client_start(int argc, const char * argv[], const char * method, const 
 	int ret = cypher_init(&cypher, 0, key, method);
 	if ( ret == 1 )
 		return ERROR_CYPHER_INIT;
-	if ( ret == 1 )
+	if ( ret == -1 )
 		return ERROR_CYPHER_UNKNOWN_METHOD;
 	
 	buffer_t buffer;

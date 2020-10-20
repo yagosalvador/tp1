@@ -17,13 +17,15 @@ int swap(void * a, void * b){
 	return 0;
 }
 
-int cypher_cesar(cypher_t * cypher, const unsigned char * string, unsigned char * output, const size_t len){
+int cypher_cesar(cypher_t * cypher, const unsigned char * string,
+				 unsigned char * output, const size_t len){
 	size_t cesar_offset = strtoul((char *) cypher->key, NULL, 10);
 	if( cesar_offset == 0 )
 		return 1;
 
 	size_t input_len = strlen((char *)string);
-	for(size_t pos = 0; (pos < len) && (pos < input_len) && (string[pos] != '\0') ; pos++){
+	for(size_t pos = 0; (pos < len) && (pos < input_len) && 
+							 (string[pos] != '\0'); pos++){
 		if( cypher->decrypt )
 			output[pos] = (string[pos] - cesar_offset) % 256;
 		else
@@ -33,9 +35,11 @@ int cypher_cesar(cypher_t * cypher, const unsigned char * string, unsigned char 
 	return 0;
 }
 
-int cypher_vigenere(cypher_t * cypher, const unsigned char * string, unsigned char * output, const size_t len){
+int cypher_vigenere(cypher_t * cypher, const unsigned char * string, 
+					unsigned char * output, const size_t len){
 	size_t input_len = strlen((char *)string);
-	for(size_t pos = 0; (pos < len) && (pos < input_len) && (string[pos] != '\0'); pos++, cypher->i++){
+	for(size_t pos = 0; (pos < len) && (pos < input_len) && 
+					(string[pos] != '\0'); pos++, cypher->i++){
 		if( cypher->key[cypher->i] == '\0' || cypher->i == cypher->key_length )
 			cypher->i = 0; //TO DO
 		if( cypher->decrypt )
@@ -43,11 +47,11 @@ int cypher_vigenere(cypher_t * cypher, const unsigned char * string, unsigned ch
 		else
 			output[pos] = (string[pos] + cypher->key[cypher->i]) % 256;
 	}
-
 	return 0;
 }
 
-int cypher_ksa(const unsigned char * key, const size_t key_length, unsigned char * permut_arr){
+int cypher_ksa(const unsigned char * key, const size_t key_length, 
+			   unsigned char * permut_arr){
 	for(size_t i = 0; i < 256; i++)
 		permut_arr[i] = i;
 
@@ -59,18 +63,19 @@ int cypher_ksa(const unsigned char * key, const size_t key_length, unsigned char
 	return 0;
 }
 
-int cypher_prga(cypher_t * cypher, unsigned char * output, const size_t len, unsigned char * permut_arr){
+int cypher_prga(cypher_t * cypher, unsigned char * output, const size_t len, 
+				unsigned char * permut_arr){
 	for(size_t k = 0; k < len; k++){
 		cypher->i = (cypher->i + 1) % 256;
 		cypher->j = (cypher->j + permut_arr[cypher->i]) % 256;
 		swap(&permut_arr[cypher->i], &permut_arr[cypher->j]);
-		output[k] = permut_arr[(permut_arr[cypher->i] + permut_arr[cypher->j]) % 256];
+		output[k] = permut_arr[(permut_arr[cypher->i]+permut_arr[cypher->j]) % 256];
 	}
-
 	return 0;
 }
 
-int cypher_rc4(cypher_t * cypher, const unsigned char * string, unsigned char * output, const size_t len){
+int cypher_rc4(cypher_t * cypher, const unsigned char * string, 
+			   unsigned char * output, const size_t len){
 	unsigned char permut_arr[256];
 
 	memset(permut_arr, '\0', 256);
@@ -90,7 +95,8 @@ int cypher_rc4(cypher_t * cypher, const unsigned char * string, unsigned char * 
 	return 0;
 }
 
-int cypher_digest(cypher_t * cypher, const unsigned char * string, unsigned char * output, const size_t len){
+int cypher_digest(cypher_t * cypher, const unsigned char * string, 
+			      unsigned char * output, const size_t len){
 	int ret = cypher->func(cypher, string, output, len);
 	if ( ret != 0 )
 		return ret;
@@ -98,8 +104,11 @@ int cypher_digest(cypher_t * cypher, const unsigned char * string, unsigned char
 	return 0;
 }
 
-int cypher_init(cypher_t * cypher, bool decrypt, const char * key, const char * method_str){
-	static cypher_func_t cypher_func_dict[N_CYPHER_FUNC] = {cypher_cesar, cypher_vigenere, cypher_rc4};
+int cypher_init(cypher_t * cypher, bool decrypt, 
+			    const char * key, const char * method_str){
+	static cypher_func_t cypher_func_dict[N_CYPHER_FUNC] = {cypher_cesar, 
+															cypher_vigenere, 
+															cypher_rc4};
 
 	cypher->i = cypher->j = 0;
 	cypher->decrypt = decrypt;
@@ -119,7 +128,9 @@ int cypher_init(cypher_t * cypher, bool decrypt, const char * key, const char * 
 }
 
 int cypher_get_func(const char * str, cypher_func * func){
-	static char * cypher_func_names[N_CYPHER_FUNC] = {"cesar", "vigenere", "rc4"};
+	static char * cypher_func_names[N_CYPHER_FUNC] = {"cesar", 
+													  "vigenere", 
+													  "rc4"};
 
 	for(size_t i = 0; i < N_CYPHER_FUNC; i++){
 		if(!strcmp(cypher_func_names[i], str)){
@@ -127,6 +138,5 @@ int cypher_get_func(const char * str, cypher_func * func){
 			return 0;
 		}
 	}
-
 	return 1;
 }

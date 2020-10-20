@@ -5,5 +5,11 @@ client
 #ignore .o files
 *.o
 
-#ignore
+#ignore text files
 *.txt
+
+#ignore Makefile
+Makefile
+
+#ignore test files
+__*
