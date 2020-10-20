@@ -57,7 +57,7 @@ status_t client_input_process(client_t * client, cypher_t * cypher,
 	if( client == NULL || buffer == NULL || output == NULL )
 		return ERROR_NULL_POINTER;
 
-	if( buffer_read(stdin, buffer) != 0){
+	if( buffer_read(stdin, buffer) != 0 ){
 		client_destroy(client);
 		return ERROR_BUFFER_READ;
 	}
