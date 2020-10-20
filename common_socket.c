@@ -143,7 +143,8 @@ status_t socket_send(socket_t * self, char * buff, size_t len){
 
 	int bytes_sent = 0;
 	while ( bytes_sent < len ) {
-		int ret_value = send(self->fd, buff + bytes_sent, len - bytes_sent, MSG_NOSIGNAL);
+		int ret_value = send(self->fd, buff + bytes_sent, 
+							 len - bytes_sent, MSG_NOSIGNAL);
 		if ( ret_value == -1 )
 			return ERROR_SOCKET_SEND;
 		bytes_sent += ret_value;

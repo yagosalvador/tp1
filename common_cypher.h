@@ -9,7 +9,9 @@
 
 struct cypher;
 
-typedef int (*cypher_func_t) (struct cypher * cypher, const unsigned char * input, unsigned char * output, const size_t len);
+typedef int (*cypher_func_t) (struct cypher * cypher, 
+							 const unsigned char * input, unsigned char * output, 
+							 const size_t len);
 
 typedef enum {
 	CESAR = 0,

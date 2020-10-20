@@ -25,7 +25,8 @@ status_t client_destroy(client_t * client){
 	return OK;
 }
 
-status_t client_connect(client_t * client, const char * host, const char * port){
+status_t client_connect(client_t * client, const char * host, 
+						const char * port){
 	if( client == NULL || host ==  NULL || port == NULL)
 		return ERROR_NULL_POINTER;
 
@@ -51,7 +52,8 @@ status_t client_send(client_t * client, char * buffer, size_t buff_len){
 	return OK;
 }
 
-status_t client_input_process(client_t * client, cypher_t * cypher, buffer_t * buffer, char * output, size_t len){
+status_t client_input_process(client_t * client, cypher_t * cypher, 
+							  buffer_t * buffer, char * output, size_t len){
 	if( client == NULL || buffer == NULL || output == NULL )
 		return ERROR_NULL_POINTER;
 
@@ -65,7 +67,8 @@ status_t client_input_process(client_t * client, cypher_t * cypher, buffer_t * b
 	if ( buffer_get(*buffer, buffer_cpy, CLIENT_BUFF_SIZE) != 0)
 		return ERROR_BUFFER_GET;
 
-	if( cypher_digest(cypher, (unsigned char *)buffer_cpy, (unsigned char *)output, CLIENT_BUFF_SIZE) != 0){ //revisar buffer.buff!!!
+	if( cypher_digest(cypher, (unsigned char *)buffer_cpy, 
+					  (unsigned char *)output, CLIENT_BUFF_SIZE) != 0){
 		client_destroy(client);
 		return ERROR_CYPHER_DIGEST;
 	}
@@ -78,7 +81,8 @@ status_t client_input_process(client_t * client, cypher_t * cypher, buffer_t * b
 	return OK;
 }
 
-status_t client_start(int argc, const char * argv[], const char * method, const char * key){
+status_t client_start(int argc, const char * argv[], 
+					  const char * method, const char * key){
 	if( argv == NULL )
 		return ERROR_NULL_POINTER;
 
@@ -104,7 +108,8 @@ status_t client_start(int argc, const char * argv[], const char * method, const 
 		return ERROR_BUFFER_INIT;
 
 	while( !buffer_eof(buffer) ){
-		status = client_input_process(&client, &cypher, &buffer, output, CLIENT_BUFF_SIZE);
+		status = client_input_process(&client, &cypher, &buffer,
+									  output, CLIENT_BUFF_SIZE);
 		if( status != OK )
 			return status;
 	}

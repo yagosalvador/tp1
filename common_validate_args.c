@@ -25,7 +25,7 @@ int validate_args(int argc, const char * argv[], char * method,
 		return 1;
 
 	for(size_t i = METHOD_ARG_POS, method_pos; i < argc; i++){
-		if(strstr(argv[i], METHOD_ARG) != NULL ){
+		if( strstr(argv[i], METHOD_ARG) != NULL ){
 			method_pos = i;
 			get_long_opt(argv[i], method, method_len);
 			if( (method_pos + 1 < argc) && 

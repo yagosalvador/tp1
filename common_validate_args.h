@@ -9,7 +9,8 @@
 #define KEY_ARG "--key="
 #define MAX_ARGS 5
 
-int validate_args(int argc, const char * argv[], char * method, size_t method_len, char * key, size_t key_len);
+int validate_args(int argc, const char * argv[], char * method, 
+				  size_t method_len, char * key, size_t key_len);
 
 int parse_long_opt(const char * opt, char * arg, size_t len);
 
