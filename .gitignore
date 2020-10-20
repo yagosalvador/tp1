@@ -1,0 +1,9 @@
+#ignore client and server
+server
+client
+
+#ignore .o files
+*.o
+
+#ignore
+*.txt
