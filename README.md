@@ -16,7 +16,7 @@ Con el fin de facilitar el funcionamiento del programa se desarrollaron los diag
 
 ![0. Imagen diagrama de flujo cliente](img/Diagrama_flujo_cliente.jpg)
 
-![1. Imagen diagrama de flujo servidor](img/Diagrama_flujo_servidor.jgp)
+![1. Imagen diagrama de flujo servidor](img/Diagrama_flujo_servidor.jpg)
 
 ### 2. Detalles de implementación
 
