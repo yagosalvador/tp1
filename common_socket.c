@@ -156,13 +156,15 @@ status_t socket_send(socket_t * self, char * buff, size_t len){
 	return OK;
 }
 
-status_t socket_recv(socket_t * self, char * buff, size_t buff_size, size_t * buff_len){
+status_t socket_recv(socket_t * self, char * buff, size_t buff_size, 
+					 size_t * buff_len){
 	if( self == NULL || buff == NULL )
 		return ERROR_NULL_POINTER;
 
 	int bytes_recv = 0;
 	while ( bytes_recv < buff_size ){
-		int ret_value = recv(self->fd, buff + bytes_recv, buff_size - bytes_recv, 0);		
+		int ret_value = recv(self->fd, buff + bytes_recv, 
+							 buff_size - bytes_recv, 0);		
 		if ( ret_value == -1 )
 			return ERROR_SOCKET_RECV;
 
@@ -175,4 +177,5 @@ status_t socket_recv(socket_t * self, char * buff, size_t buff_size, size_t * bu
 	return OK;
 }
 
-//refactor de socket sin status_t? uso status_t solo para la api del server/cliente?
+//refactor de socket sin status_t? 
+//uso status_t solo para la api del server/cliente?

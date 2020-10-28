@@ -13,3 +13,6 @@ Makefile
 
 #ignore test files
 __*
+
+#ignore .zip
+*.zip

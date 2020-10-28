@@ -14,7 +14,8 @@ int buffer_init(buffer_t * buffer){
 }
 
 int buffer_read(FILE * file, buffer_t * buffer){
-	memset(buffer->buff, '\0', buffer->buff_size); //in case it has to be overwritten
+	memset(buffer->buff, '\0', buffer->buff_size); 
+	//in case it has to be overwritten
 
 	size_t bytes = fread(buffer->buff, 1, buffer->buff_size, file);
 	if( bytes != buffer->buff_size ){

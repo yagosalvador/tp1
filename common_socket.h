@@ -33,7 +33,8 @@ status_t socket_shutdown(socket_t * self, size_t mode);
 
 status_t socket_send(socket_t * self, char * buff, size_t len);
 
-status_t socket_recv(socket_t * self, char * buff, size_t buff_size, size_t * buff_len);
+status_t socket_recv(socket_t * self, char * buff, 
+					 size_t buff_size, size_t * buff_len);
 
 //ANALIZAR SI LA CONFIG DEL CLIENTE Y EL SV HAY QUE PASARLA POR ARGUMENTOS
 

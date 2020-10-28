@@ -17,8 +17,8 @@ int swap(void * a, void * b){
 	return 0;
 }
 
-int cypher_cesar(cypher_t * cypher, const unsigned char * string, size_t str_len,
-				 unsigned char * output, const size_t out_len){
+int cypher_cesar(cypher_t * cypher, const unsigned char * string, 
+			     size_t str_len, unsigned char * output, const size_t out_len){
 	size_t cesar_offset = strtoul((char *) cypher->key, NULL, 10);
 
 	for(size_t pos = 0; pos < out_len; pos++){
@@ -33,8 +33,8 @@ int cypher_cesar(cypher_t * cypher, const unsigned char * string, size_t str_len
 	return 0;
 }
 
-int cypher_vigenere(cypher_t * cypher, const unsigned char * string, size_t str_len, 
-					unsigned char * output, const size_t out_len){
+int cypher_vigenere(cypher_t * cypher, const unsigned char * string,
+					size_t str_len, unsigned char * output, const size_t out_len){
 
 	for(size_t pos = 0; pos < out_len; pos++, cypher->i++){
 		if( cypher->i == cypher->key_length )
@@ -73,8 +73,8 @@ int cypher_prga(cypher_t * cypher, unsigned char * output, const size_t len,
 	return 0;
 }
 
-int cypher_rc4(cypher_t * cypher, const unsigned char * string, size_t str_len, 
-			   unsigned char * output, const size_t out_len){
+int cypher_rc4(cypher_t * cypher, const unsigned char * string,
+			   size_t str_len, unsigned char * output, const size_t out_len){
 	unsigned char permut_arr[256];
 
 	memset(permut_arr, '\0', 256);
@@ -97,8 +97,9 @@ int cypher_rc4(cypher_t * cypher, const unsigned char * string, size_t str_len,
 	return 0;
 }
 
-int cypher_digest(cypher_t * cypher, const unsigned char * string, const size_t str_len,
-			      unsigned char * output, const size_t out_len){
+int cypher_digest(cypher_t * cypher, const unsigned char * string, 
+				  const size_t str_len, unsigned char * output, const size_t out_len){
+	
 	int ret = cypher->func(cypher, string, str_len, output, out_len);
 	if ( ret != 0 )
 		return ret;
