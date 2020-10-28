@@ -40,7 +40,8 @@ status_t server_connect(server_t * server, const char * port){
 	return OK;
 }
 
-status_t server_receive(server_t * server, char * buff, size_t buff_size, size_t * buff_len){
+status_t server_receive(server_t * server, char * buff, 
+						size_t buff_size, size_t * buff_len){
 	if( server == NULL || buff == NULL )
 		return ERROR_NULL_POINTER;
 
@@ -68,8 +69,8 @@ status_t server_process(server_t * server, struct cypher * cypher){
 		}
 
 		memset(output, '\0', SERVER_BUFF_SIZE+1);
-		if( cypher_digest(cypher,(unsigned char *) buff, buff_len, (unsigned char *) output, 
-														 SERVER_BUFF_SIZE) != 0 ){
+		if( cypher_digest(cypher,(unsigned char *) buff, buff_len, 
+						  (unsigned char *) output, SERVER_BUFF_SIZE) != 0 ){
 			server_destroy(server);
 			return ERROR_CYPHER_DIGEST;
 		}

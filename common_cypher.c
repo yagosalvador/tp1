@@ -24,7 +24,7 @@ int cypher_cesar(cypher_t * cypher, const unsigned char * string,
 	for(size_t pos = 0; pos < out_len; pos++){
 		if( pos >= str_len )
 			output[pos] = '\0';
-		else if( cypher->decrypt )
+		else if ( cypher->decrypt )
 			output[pos] = (string[pos] - cesar_offset) % 256;
 		else
 			output[pos] = (string[pos] + cesar_offset) % 256;
@@ -35,13 +35,12 @@ int cypher_cesar(cypher_t * cypher, const unsigned char * string,
 
 int cypher_vigenere(cypher_t * cypher, const unsigned char * string,
 					size_t str_len, unsigned char * output, const size_t out_len){
-
 	for(size_t pos = 0; pos < out_len; pos++, cypher->i++){
 		if( cypher->i == cypher->key_length )
 			cypher->i = 0;
 		if( pos >= str_len )
 			output[pos] = '\0';
-		else if( cypher->decrypt )
+		else if ( cypher->decrypt )
 			output[pos] = (string[pos] - cypher->key[cypher->i]) % 256;
 		else
 			output[pos] = (string[pos] + cypher->key[cypher->i]) % 256;
@@ -99,7 +98,6 @@ int cypher_rc4(cypher_t * cypher, const unsigned char * string,
 
 int cypher_digest(cypher_t * cypher, const unsigned char * string, 
 				  const size_t str_len, unsigned char * output, const size_t out_len){
-	
 	int ret = cypher->func(cypher, string, str_len, output, out_len);
 	if ( ret != 0 )
 		return ret;

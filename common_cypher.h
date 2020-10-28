@@ -31,8 +31,8 @@ typedef struct cypher {
 int cypher_cesar(cypher_t * self, const unsigned char * string, size_t str_len,
 				unsigned char * output, const size_t out_len);
 
-int cypher_vigenere(cypher_t * self, const unsigned char * string, size_t str_len,
-					unsigned char * output, const size_t out_len);
+int cypher_vigenere(cypher_t * self, const unsigned char * string, 
+					size_t str_len, unsigned char * output, const size_t out_len);
 
 int cypher_rc4(cypher_t * self, const unsigned char * string, size_t str_len, 
 			   unsigned char * output, const size_t out_len);
@@ -48,8 +48,8 @@ int swap(void * a, void * b);
 int cypher_init(cypher_t * cypher, bool decrypt, 
 	            const char * key, const char * method_str);
 
-int cypher_digest(cypher_t * cypher, const unsigned char * string,  const size_t str_len, 
-	              unsigned char * output, const size_t len);
+int cypher_digest(cypher_t * cypher, const unsigned char * string,  
+				  const size_t str_len, unsigned char * output, const size_t len);
 
 int cypher_get_func(const char * str, cypher_func * func);
 

@@ -21,6 +21,6 @@ bool buffer_eof(const buffer_t * buffer);
 
 int buffer_get(const buffer_t * buffer, char * output, size_t len);
 
-size_t buffer_get_len(const buffer_t * buffer);
+//size_t buffer_get_len(const buffer_t * buffer);
 
 #endif

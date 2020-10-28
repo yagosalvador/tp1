@@ -32,11 +32,11 @@ bool buffer_eof(const buffer_t * buffer){
 	return buffer->eof;
 }
 
-int buffer_get(const buffer_t *  buffer, char * output, size_t len){
+/*int buffer_get(const buffer_t *  buffer, char * output, size_t len){
 	if( snprintf(output, len, "%s", buffer->buff) < 0 )
 		return 1;
 	return 0;
-}
+}*/
 
 size_t buffer_get_len(const buffer_t * buffer){
 	if( buffer == NULL )
