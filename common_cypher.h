@@ -26,6 +26,7 @@ typedef struct cypher {
 	size_t key_length;
 	size_t i, j;
 	cypher_func_t func;
+	unsigned char permut_arr[SIZE];
 } cypher_t;
 
 int cypher_cesar(cypher_t * self, const unsigned char * string, size_t str_len,

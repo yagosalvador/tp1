@@ -70,6 +70,9 @@ status_t client_input_process(client_t * client, cypher_t * cypher,
 		client_destroy(client);
 		return ERROR_CYPHER_DIGEST;
 	}
+	for(size_t i = 0; i < buffer_len; i++)
+		fprintf(stdout, "%x", output[i]);
+	fprintf(stdout, "\n");
 	status_t status = client_send(client, output, buffer_len);
 	if( status != OK ){
 		client_destroy(client);

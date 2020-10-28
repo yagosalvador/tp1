@@ -20,6 +20,5 @@ int main(int argc, const char * argv[]){
 		print_error(stderr, status);
 		return status;
 	}
-
 	return status;
 }

@@ -25,11 +25,10 @@ int cypher_cesar(cypher_t * cypher, const unsigned char * string,
 		if( pos >= str_len )
 			output[pos] = '\0';
 		else if ( cypher->decrypt )
-			output[pos] = (string[pos] - cesar_offset) % 256;
+			output[pos] = (string[pos] - cesar_offset) % SIZE;
 		else
-			output[pos] = (string[pos] + cesar_offset) % 256;
+			output[pos] = (string[pos] + cesar_offset) % SIZE;
 	}
-
 	return 0;
 }
 
@@ -41,48 +40,46 @@ int cypher_vigenere(cypher_t * cypher, const unsigned char * string,
 		if( pos >= str_len )
 			output[pos] = '\0';
 		else if ( cypher->decrypt )
-			output[pos] = (string[pos] - cypher->key[cypher->i]) % 256;
+			output[pos] = (string[pos] - cypher->key[cypher->i]) % SIZE;
 		else
-			output[pos] = (string[pos] + cypher->key[cypher->i]) % 256;
+			output[pos] = (string[pos] + cypher->key[cypher->i]) % SIZE;
 	}
 	return 0;
 }
 
 int cypher_ksa(const unsigned char * key, const size_t key_length, 
 			   unsigned char * permut_arr){
-	for(size_t i = 0; i < 256; i++)
+	for(size_t i = 0; i < SIZE; i++)
 		permut_arr[i] = i;
 
-	for(size_t i = 0, j = 0; i < 256; i++){
-		j = (j + permut_arr[i] + key[i % key_length]) % 256;
+	for(size_t i = 0, j = 0; i < SIZE; i++){
+		j = (j + permut_arr[i] + key[i % key_length]) % SIZE;
 		swap(&permut_arr[i], &permut_arr[j]);
 	}
-
 	return 0;
 }
 
 int cypher_prga(cypher_t * cypher, unsigned char * output, const size_t len, 
 				unsigned char * permut_arr){
 	for(size_t k = 0; k < len; k++){
-		cypher->i = (cypher->i + 1) % 256;
-		cypher->j = (cypher->j + permut_arr[cypher->i]) % 256;
+		cypher->i = (cypher->i + 1) % SIZE;
+		cypher->j = (cypher->j + permut_arr[cypher->i]) % SIZE;
 		swap(&permut_arr[cypher->i], &permut_arr[cypher->j]);
-		output[k] = permut_arr[(permut_arr[cypher->i]+permut_arr[cypher->j]) % 256];
+		output[k] = permut_arr[(permut_arr[cypher->i]+permut_arr[cypher->j]) % SIZE];
 	}
 	return 0;
 }
 
 int cypher_rc4(cypher_t * cypher, const unsigned char * string,
 			   size_t str_len, unsigned char * output, const size_t out_len){
-	unsigned char permut_arr[256];
 
-	memset(permut_arr, '\0', 256);
-
-	int ret = cypher_ksa(cypher->key, cypher->key_length, permut_arr);
-	if( ret != 0 )
-		return ret;
-
-	ret = cypher_prga(cypher, output, out_len, permut_arr);
+	if( cypher->permut_arr[0] == '\0' ){ //else it will already be initialized
+		int ret = cypher_ksa(cypher->key, cypher->key_length, cypher->permut_arr);
+		if( ret != 0 )
+			return ret;
+	}
+	
+	int ret = cypher_prga(cypher, output, out_len, cypher->permut_arr);
 	if( ret != 0 )
 		return ret;
 
@@ -92,7 +89,6 @@ int cypher_rc4(cypher_t * cypher, const unsigned char * string,
 		else
 			output[i] = string[i] ^ output[i];
 	}
-
 	return 0;
 }
 
@@ -101,7 +97,6 @@ int cypher_digest(cypher_t * cypher, const unsigned char * string,
 	int ret = cypher->func(cypher, string, str_len, output, out_len);
 	if ( ret != 0 )
 		return ret;
-
 	return 0;
 }
 
@@ -125,6 +120,7 @@ int cypher_init(cypher_t * cypher, bool decrypt,
 		return 1;
 	
 	cypher->key_length = strlen(key);
+	memset(cypher->permut_arr, '\0', SIZE);
 	return 0;
 }
 
