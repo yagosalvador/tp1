@@ -72,7 +72,6 @@ int cypher_prga(cypher_t * cypher, unsigned char * output, const size_t len,
 
 int cypher_rc4(cypher_t * cypher, const unsigned char * string,
 			   size_t str_len, unsigned char * output, const size_t out_len){
-
 	if( cypher->permut_arr[0] == '\0' ){ //else it will already be initialized
 		int ret = cypher_ksa(cypher->key, cypher->key_length, cypher->permut_arr);
 		if( ret != 0 )
