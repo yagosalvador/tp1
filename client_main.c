@@ -15,7 +15,6 @@ int main(int argc, const char * argv[]){
 		return status;
 	}
 
-
 	status = client_start(argc, argv, method, key);
 	if( status != OK ){
 		print_error(stderr, status);

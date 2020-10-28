@@ -47,7 +47,8 @@ status_t socket_bind_and_listen(socket_t * self, const char * port){
 	if( getaddrinfo(NULL, port, &hints, &res) != 0 )
 		return ERROR_GETADDRINFO;
 
-	for( rp = res; rp != NULL; rp = rp->ai_next ){
+	size_t binded = 1;
+	for( rp = res; (rp != NULL) && (binded != 0); rp = rp->ai_next ){
 		status = socket_init(self, rp->ai_family, 
 							rp->ai_socktype, rp->ai_protocol);
 		if( status != OK ){
@@ -55,7 +56,8 @@ status_t socket_bind_and_listen(socket_t * self, const char * port){
 			return status;
 		}
 
-		if( bind(self->fd, res->ai_addr, res->ai_addrlen) == -1 ){
+		binded = bind(self->fd, res->ai_addr, res->ai_addrlen);
+		if( binded == -1 ){
 			socket_destroy(self);
 			freeaddrinfo(res);
 			return ERROR_BINDING_SOCKET;
@@ -101,7 +103,8 @@ status_t socket_connect(socket_t * self, const char * host, const char * port){
 	if( getaddrinfo(host, port, &hints, &res) != 0 ) //client config?
 		return ERROR_GETADDRINFO;
 
-	for( rp = res; rp != NULL; rp = rp->ai_next ){
+	int connected = 1;
+	for( rp = res; (rp != NULL) && (connected != 0); rp = rp->ai_next ){
 		status = socket_init(self, rp->ai_family, 
 							rp->ai_socktype, rp->ai_protocol);
 		if ( status != OK ){
@@ -109,7 +112,8 @@ status_t socket_connect(socket_t * self, const char * host, const char * port){
 			return status;
 		}
 
-		if( connect(self->fd, res->ai_addr, res->ai_addrlen) == -1 ){
+		connected = connect(self->fd, res->ai_addr, res->ai_addrlen);
+		if( connected == -1 ){
 			freeaddrinfo(res);
 			socket_destroy(self);
 			return ERROR_CONNECTING_SOCKET;
@@ -152,17 +156,23 @@ status_t socket_send(socket_t * self, char * buff, size_t len){
 	return OK;
 }
 
-status_t socket_recv(socket_t * self, char * buff, size_t len){
+status_t socket_recv(socket_t * self, char * buff, size_t buff_size, size_t * buff_len){
 	if( self == NULL || buff == NULL )
 		return ERROR_NULL_POINTER;
 
-	int bytes_recv = recv(self->fd, buff, len, 0);
+	int bytes_recv = 0;
+	while ( bytes_recv < buff_size ){
+		int ret_value = recv(self->fd, buff + bytes_recv, buff_size - bytes_recv, 0);		
+		if ( ret_value == -1 )
+			return ERROR_SOCKET_RECV;
 
-	if ( bytes_recv == -1 )
-		return ERROR_SOCKET_RECV;
-
-	if ( !bytes_recv )
-		return SOCKET_CLOSED;
-
+		if ( !ret_value )
+			return SOCKET_CLOSED;
+		
+		bytes_recv += ret_value;
+		*buff_len = bytes_recv;
+	}
 	return OK;
 }
+
+//refactor de socket sin status_t? uso status_t solo para la api del server/cliente?

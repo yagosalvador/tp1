@@ -17,16 +17,14 @@ int swap(void * a, void * b){
 	return 0;
 }
 
-int cypher_cesar(cypher_t * cypher, const unsigned char * string,
-				 unsigned char * output, const size_t len){
+int cypher_cesar(cypher_t * cypher, const unsigned char * string, size_t str_len,
+				 unsigned char * output, const size_t out_len){
 	size_t cesar_offset = strtoul((char *) cypher->key, NULL, 10);
-	if( cesar_offset == 0 )
-		return 1;
 
-	size_t input_len = strlen((char *)string);
-	for(size_t pos = 0; (pos < len) && (pos < input_len) && 
-							 (string[pos] != '\0'); pos++){
-		if( cypher->decrypt )
+	for(size_t pos = 0; pos < out_len; pos++){
+		if( pos >= str_len )
+			output[pos] = '\0';
+		else if( cypher->decrypt )
 			output[pos] = (string[pos] - cesar_offset) % 256;
 		else
 			output[pos] = (string[pos] + cesar_offset) % 256;
@@ -35,14 +33,15 @@ int cypher_cesar(cypher_t * cypher, const unsigned char * string,
 	return 0;
 }
 
-int cypher_vigenere(cypher_t * cypher, const unsigned char * string, 
-					unsigned char * output, const size_t len){
-	size_t input_len = strlen((char *)string);
-	for(size_t pos = 0; (pos < len) && (pos < input_len) && 
-					(string[pos] != '\0'); pos++, cypher->i++){
-		if( cypher->key[cypher->i] == '\0' || cypher->i == cypher->key_length )
-			cypher->i = 0; //TO DO
-		if( cypher->decrypt )
+int cypher_vigenere(cypher_t * cypher, const unsigned char * string, size_t str_len, 
+					unsigned char * output, const size_t out_len){
+
+	for(size_t pos = 0; pos < out_len; pos++, cypher->i++){
+		if( cypher->i == cypher->key_length )
+			cypher->i = 0;
+		if( pos >= str_len )
+			output[pos] = '\0';
+		else if( cypher->decrypt )
 			output[pos] = (string[pos] - cypher->key[cypher->i]) % 256;
 		else
 			output[pos] = (string[pos] + cypher->key[cypher->i]) % 256;
@@ -74,8 +73,8 @@ int cypher_prga(cypher_t * cypher, unsigned char * output, const size_t len,
 	return 0;
 }
 
-int cypher_rc4(cypher_t * cypher, const unsigned char * string, 
-			   unsigned char * output, const size_t len){
+int cypher_rc4(cypher_t * cypher, const unsigned char * string, size_t str_len, 
+			   unsigned char * output, const size_t out_len){
 	unsigned char permut_arr[256];
 
 	memset(permut_arr, '\0', 256);
@@ -84,20 +83,23 @@ int cypher_rc4(cypher_t * cypher, const unsigned char * string,
 	if( ret != 0 )
 		return ret;
 
-	ret = cypher_prga(cypher, output, len, permut_arr);
+	ret = cypher_prga(cypher, output, out_len, permut_arr);
 	if( ret != 0 )
 		return ret;
 
-	size_t input_len = strlen((char *)string);
-	for(size_t i = 0; (i < len) && (i < input_len) && (string[i] != '\0'); i++)
-		output[i] = string[i] ^ output[i];
+	for(size_t i = 0; i < out_len; i++){
+		if( i >= str_len )
+			output[i] = '\0'; //complete missing chars with null char
+		else
+			output[i] = string[i] ^ output[i];
+	}
 
 	return 0;
 }
 
-int cypher_digest(cypher_t * cypher, const unsigned char * string, 
-			      unsigned char * output, const size_t len){
-	int ret = cypher->func(cypher, string, output, len);
+int cypher_digest(cypher_t * cypher, const unsigned char * string, const size_t str_len,
+			      unsigned char * output, const size_t out_len){
+	int ret = cypher->func(cypher, string, str_len, output, out_len);
 	if ( ret != 0 )
 		return ret;
 

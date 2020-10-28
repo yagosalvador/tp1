@@ -27,6 +27,6 @@ status_t client_connect(client_t * client, const char * host,
 status_t client_send(client_t * client, char * buffer, size_t buff_len);
 
 status_t client_input_process(client_t * client, cypher_t * cypher, 
-							  buffer_t * buffer, char * output, size_t len);
+							  buffer_t * buffer);
 
 #endif

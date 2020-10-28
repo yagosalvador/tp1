@@ -35,7 +35,6 @@ status_t client_connect(client_t * client, const char * host,
 		client_destroy(client);
 		return status;
 	}
-
 	return OK;
 }
 
@@ -48,32 +47,30 @@ status_t client_send(client_t * client, char * buffer, size_t buff_len){
 		client_destroy(client);
 		return status;
 	}
-
 	return OK;
 }
 
 status_t client_input_process(client_t * client, cypher_t * cypher, 
-							  buffer_t * buffer, char * output, size_t len){
-	if( client == NULL || buffer == NULL || output == NULL )
+							  buffer_t * buffer){
+	if( client == NULL || buffer == NULL )
 		return ERROR_NULL_POINTER;
+
+	char output[CLIENT_BUFF_SIZE];
+	memset(output, '\0', CLIENT_BUFF_SIZE);
 
 	if( buffer_read(stdin, buffer) != 0 ){
 		client_destroy(client);
 		return ERROR_BUFFER_READ;
 	}
-	char buffer_cpy[CLIENT_BUFF_SIZE];
-	memset(buffer_cpy, '\0', CLIENT_BUFF_SIZE);
 
-	if ( buffer_get(*buffer, buffer_cpy, CLIENT_BUFF_SIZE) != 0)
-		return ERROR_BUFFER_GET;
-
-	if( cypher_digest(cypher, (unsigned char *)buffer_cpy, 
+	//usar buff_cpy
+	size_t buffer_len = buffer_get_len(buffer);
+	if( cypher_digest(cypher, (unsigned char *)buffer->buff, buffer_len, 
 					  (unsigned char *)output, CLIENT_BUFF_SIZE) != 0){
 		client_destroy(client);
 		return ERROR_CYPHER_DIGEST;
 	}
-
-	status_t status = client_send(client, output, CLIENT_BUFF_SIZE);
+	status_t status = client_send(client, output, buffer_len);
 	if( status != OK ){
 		client_destroy(client);
 		return status;
@@ -87,9 +84,6 @@ status_t client_start(int argc, const char * argv[],
 		return ERROR_NULL_POINTER;
 
 	client_t client;
-	char output[CLIENT_BUFF_SIZE];
-	memset(output, '\0', CLIENT_BUFF_SIZE);
-
 	status_t status = client_connect(&client, argv[1], argv[2]);
 	if( status != OK ){
 		client_destroy(&client);
@@ -107,9 +101,8 @@ status_t client_start(int argc, const char * argv[],
 	if( buffer_init(&buffer) != 0 )
 		return ERROR_BUFFER_INIT;
 
-	while( !buffer_eof(buffer) ){
-		status = client_input_process(&client, &cypher, &buffer,
-									  output, CLIENT_BUFF_SIZE);
+	while( !buffer_eof(&buffer) ){
+		status = client_input_process(&client, &cypher, &buffer);
 		if( status != OK )
 			return status;
 	}
