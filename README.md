@@ -4,6 +4,7 @@ Url: https://github.com/yagosalvador/tp1.git
 
 Taller de Programación FIUBA Trabajo Práctico N1: Crypto-Sockets
 
+### Dejé dudas y errores en el issue
 ----------------------
 ## 1. Introducción
 En el presente informe se intentará detallar la implementación del programa desarrollado. El mismo consta de el desarrollo de una aplicación cliente-servidor donde el cliente recibe una cadena por *stdin*, la encripta y envía al servidor. Por su parte, el servidor se encarga de recibir la cadena encriptada, desencriptarla e imprimir la misma por *stdout*. Al ejecutar tanto el cliente como el servidor se debe indicar que método se usará para encriptar y la *key* correspondiente para el mismo.
