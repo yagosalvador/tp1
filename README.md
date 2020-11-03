@@ -15,9 +15,9 @@ En el presente informe se intentará detallar la implementación del programa de
 
 Con el fin de facilitar el funcionamiento del programa se desarrollaron los diagramas de flujo correspondientes de cada implicado.
 
-![0. Imagen diagrama de flujo cliente](img/Diagrama_flujo_cliente.jpg)
+![0. Imagen diagrama de flujo cliente](Diagrama_flujo_cliente.jpg)
 
-![1. Imagen diagrama de flujo servidor](img/Diagrama_flujo_servidor.jpg)
+![1. Imagen diagrama de flujo servidor](Diagrama_flujo_servidor.jpg)
 
 ### 2. Detalles de implementación
 
